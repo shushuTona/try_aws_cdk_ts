@@ -1,13 +1,7 @@
-# cdk_aws_batch
+# try_aws_cdk_ts
 
-AWS Batch環境をCDKで書いてみる。
+AWS CDK（v2）をTSで書いてみる。
 
-## setup local docker container
-
-```cmd
-docker build -t cdk_aws_batch_image .
-```
-
-```cmd
-docker run -it --name cdk_aws_batch_container -v 【path to try_aws_cdk_ts/cdk_aws_batch/src from host root】:/cdk_aws_batch cdk_aws_batch_image bash
-```
+- [AWS CDK とは](https://docs.aws.amazon.com/ja_jp/cdk/v2/guide/home.html)
+- [API Reference · AWS CDK](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html)
+- [aws-samples/aws-cdk-examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript)
