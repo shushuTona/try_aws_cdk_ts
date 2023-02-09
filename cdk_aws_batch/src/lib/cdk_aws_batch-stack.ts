@@ -10,7 +10,7 @@ export class CdkAwsBatchStack extends cdk.Stack {
     // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2.Vpc.html
     const vpc = new ec2.Vpc( this, 'cdk_aws_batch_vpc',
                                               {
-                                                ipAddresses: ec2.IpAddresses.cidr( '10.0.0.0/16' ),
+                                                ipAddresses: ec2.IpAddresses.cidr( '10.10.0.0/16' ),
                                                 maxAzs: 2,
                                                 subnetConfiguration: [
                                                   {
