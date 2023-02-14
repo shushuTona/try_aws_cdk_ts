@@ -1,44 +1,48 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { Vpc, IpAddresses, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import { aws_ecr as ecr } from 'aws-cdk-lib';
-import { aws_batch as batch } from 'aws-cdk-lib';
+
+import { createComputeEnvironment } from '../resources/computeEnvironment';
+import { createJobDefinition } from '../resources/jobDefinition';
+import { createJobQueue } from '../resources/jobQueue';
+import { createRepository } from '../resources/repository';
 
 export class CdkAwsBatchStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // class Vpc (construct)
+    // CREATE VPC
     // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2.Vpc.html
     // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2.CfnVPC.html
-    const vpc = new ec2.Vpc( this, 'cdk_aws_batch_vpc',
-                                              {
-                                                ipAddresses: ec2.IpAddresses.cidr( '10.10.0.0/16' ),
-                                                maxAzs: 2,
-                                                subnetConfiguration: [
-                                                  {
-                                                    cidrMask: 24,
-                                                    name: 'public-subnet',
+    const vpc = new Vpc( this, 'cdk_aws_batch_vpc',
+                            {
+                              ipAddresses: IpAddresses.cidr( '10.10.0.0/16' ),
+                              maxAzs: 3,
+                              subnetConfiguration: [
+                                {
+                                  cidrMask: 24,
+                                  name: 'public-subnet',
 
-                                                    // Subnet Types
-                                                    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2-readme.html#subnet-types
-                                                    subnetType: ec2.SubnetType.PUBLIC
-                                                  }
-                                                ]
-                                              }
-                                            );
+                                  // Subnet Types
+                                  // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ec2-readme.html#subnet-types
+                                  subnetType: SubnetType.PUBLIC
+                                }
+                              ]
+                            }
+                          );
 
-    // class CfnPublicRepository
-    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecr.CfnPublicRepository.html
+    // create ECR repository
+    const TestRepository = createRepository(this);
 
-    // class CfnComputeEnvironment
-    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_batch.CfnComputeEnvironment.html
+    // create batch ComputeEnvironment
+    const TestComputeEnvironment = createComputeEnvironment(this);
 
-    // class CfnJobDefinition
-    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_batch.CfnJobDefinition.html
+    // create JobDefinition
+    const TestJobDefinition = createJobDefinition(this);
 
     // class CfnJobQueue
-    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_batch.CfnJobQueue.html
+    const TestJobQueue = createJobQueue(this);
 
     // class CfnRule
     // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_events.CfnRule.html
